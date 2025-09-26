@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Provisional Time-Table</title>
+    <link rel="stylesheet" href="styles5.css" />
+    <link rel="icon" href="pic.png" type="image/png" />
+    <style>
+      /* Ensure table has equal sized rows and columns */
+      #timetable {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      #timetable td {
+        word-wrap: break-word;
+        white-space: normal;
+      }
+      #timetable {
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+      }
+      #timetable th,
+      #timetable td {
+        border: 1px solid #333;
+        padding: 8px 12px;
+        text-align: center;
+        height: 50px; /* or even 40px for a tighter fit */
+      }
+      #timetable th {
+        background-color: #8f8e92;
+        color: white;
+      }
+
+      /* Modals */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      .close {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #888;
+      }
+      .close:hover {
+        color: black;
+      }
+
+      /* Additional minor styling */
+      .container {
+        padding: 20px;
+        text-align: center;
+        max-width: 1200px; /* or 100%, or 90vw */
+        margin: auto;
+      }
+      .columns {
+        margin-top: 30px;
+      }
+      .subject-list {
+        text-align: left;
+        display: inline-block;
+      }
+      header.header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: gray; /* header changed to gray */
+        color: white;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+      .logo img.logo-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+        cursor: pointer;
+      }
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+      .footer {
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="logo-icon" />
+        𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎
+      </div>
+      <nav class="nav-links">
+        <a href="first.html">𝑯𝒐𝒎𝒆</a>
+        <a onclick="showAbout()">𝑨𝒃𝒐𝒖𝒕</a>
+        <a onclick="showContact()">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+        <a onclick="logout()">𝑳𝒐𝒈𝒐𝒖𝒕</a>
+      </nav>
+    </header>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">×</span>
+        <h2>𝑨𝒃𝒐𝒖𝒕 𝑻𝒉𝒊𝒔 𝑾𝒆𝒃𝒔𝒊𝒕𝒆</h2>
+        <p>
+          𝙏𝙞𝙢𝙚𝙏𝙖𝙗𝙡𝙚 𝙈𝙖𝙣𝙖𝙜𝙚𝙢𝙚𝙣𝙩 𝙎𝙮𝙨𝙩𝙚𝙢 𝙨𝙞𝙢𝙥𝙡𝙞𝙛𝙞𝙚𝙨 𝙩𝙝𝙚 𝙥𝙧𝙤𝙘𝙚𝙨𝙨 𝙤𝙛 𝙩𝙞𝙢𝙚𝙩𝙖𝙗𝙡𝙚
+          𝙘𝙧𝙚𝙖𝙩𝙞𝙤𝙣 𝙖𝙣𝙙 𝙚𝙣𝙝𝙖𝙣𝙘𝙚𝙨 𝙩𝙝𝙚 𝙤𝙫𝙚𝙧𝙖𝙡𝙡 𝙖𝙘𝙖𝙙𝙚𝙢𝙞𝙘 𝙚𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙚 𝙛𝙤𝙧 𝙨𝙩𝙪𝙙𝙚𝙣𝙩𝙨 𝙖𝙣𝙙
+          𝙛𝙖𝙘𝙪𝙡𝙩𝙮. 𝙏𝙝𝙞𝙨 𝙥𝙖𝙜𝙚 𝙨𝙚𝙧𝙫𝙚𝙨 𝙖𝙨 𝙩𝙝𝙚 𝙨𝙩𝙖𝙧𝙩𝙞𝙣𝙜 𝙞𝙣𝙩𝙚𝙧𝙛𝙖𝙘𝙚 𝙬𝙞𝙩𝙝 𝙣𝙖𝙫𝙞𝙜𝙖𝙩𝙞𝙤𝙣
+          𝙖𝙣𝙙 𝙖𝙪𝙩𝙝𝙚𝙣𝙩𝙞𝙘𝙖𝙩𝙞𝙤𝙣 𝙛𝙚𝙖𝙩𝙪𝙧𝙚𝙨.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('contactModal')">×</span>
+        <h2>𝑪𝒐𝒏𝒕𝒂𝒄𝒕 𝑼𝒔</h2>
+        <p>
+          <strong>𝑬𝒎𝒂𝒊𝒍:</strong> 𝒔𝒉𝒂𝒊𝒌𝒇𝒂𝒚𝒂𝒛73822@𝒈𝒎𝒂𝒊𝒍.𝒄𝒐𝒎<br />
+          <strong>𝑷𝒉𝒐𝒏𝒆:</strong> 7382259565<br />
+          <strong>𝑨𝒅𝒅𝒓𝒆𝒔𝒔:</strong> 𝑲𝒖𝒌𝒂𝒕𝒑𝒂𝒍𝒍𝒚, 𝑯𝒚𝒅𝒆𝒓𝒂𝒃𝒂𝒅, 𝑰𝒏𝒅𝒊𝒂<br />
+          <strong>𝑭𝒐𝒍𝒍𝒐𝒘 𝒖𝒔:</strong> 𝑭𝒂𝒄𝒆𝒃𝒐𝒐𝒌 | 𝑻𝒘𝒊𝒕𝒕𝒆𝒓 | 𝑰𝒏𝒔𝒕𝒂𝒈𝒓𝒂𝒎
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <h1>𝑱𝑵𝑻𝑼𝑯 𝑪𝑶𝑳𝑳𝑬𝑮𝑬 𝑶𝑭 𝑬𝑵𝑮𝑰𝑵𝑬𝑬𝑹𝑰𝑵𝑮 𝑯𝒀𝑫𝑬𝑹𝑨𝑩𝑨𝑫</h1>
+      <h2>𝑫𝒆𝒑𝒕 𝒐𝒇 𝑪𝒐𝒎𝒑𝒖𝒕𝒆𝒓 𝑺𝒄𝒊𝒆𝒏𝒄𝒆 𝒂𝒏𝒅 𝑬𝒏𝒈𝒊𝒏𝒆𝒆𝒓𝒊𝒏𝒈</h2>
+      <h3 id="classInfo"></h3>
+      <h4>𝑷𝑹𝑶𝑽𝑰𝑺𝑰𝑶𝑵𝑨𝑳 𝑻𝑰𝑴𝑬-𝑻𝑨𝑩𝑳E</h4>
+      <p id="semesterStart"><strong>𝑺𝒆𝒎𝒆𝒔𝒕𝒆𝒓 𝑪𝒐𝒎𝒎𝒆𝒏𝒄𝒆𝒔 𝑭𝒓𝒐𝒎: ...</strong></p>
+      <!-- Timetable -->
+      <table id="timetable">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>9:30 AM - 11:00 AM</th>
+            <th>11:00 AM - 12:30 PM</th>
+            <th>1:45 PM - 3:15 PM</th>
+            <th>3:15 PM - 4:45 PM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Tuesday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Wednesday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Thursday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Friday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Saturday</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Subjects List -->
+      <div class="columns">
+        <div class="column">
+          <h5><strong>𝑵𝒂𝒎𝒆 𝒐𝒇 𝒕𝒉𝒆 𝑺𝒖𝒃𝒋𝒆𝒄𝒕𝒔</strong></h5>
+          <ol class="subject-list"></ol>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>𝑯𝒆𝒂𝒅, 𝑪𝑺𝑬 𝑫𝒆𝒑𝒕.</p>
+        <p>𝑲. 𝑲.</p>
+      </div>
+    </div>
+    <!-- Script Section -->
+    <script>
+      // Modal handling
+      function showAbout() {
+        document.getElementById("aboutModal").style.display = "block";
+      }
+      function showContact() {
+        document.getElementById("contactModal").style.display = "block";
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+      window.onclick = (e) => {
+        if (e.target.classList.contains("modal"))
+          e.target.style.display = "none";
+      };
+
+      // Read URL params
+      function getQueryParams() {
+        const p = new URLSearchParams(window.location.search);
+        return {
+          semester: p.get("semester") || "",
+          class: p.get("class") || "",
+          room: p.get("room") || "",
+          department: p.get("department") || "",
+        };
+      }
+
+      // Update header info
+      function populateHeaderInfo() {
+        const { semester, class: cls } = getQueryParams();
+        document.getElementById(
+          "classInfo"
+        ).textContent = `B.Tech. III-Year (Class - ${cls}) (${semester}-Semester)`;
+      }
+
+      // Fetch and render timetable
+      function fetchTimetable() {
+        const { semester, class: cls, room, department } = getQueryParams();
+        fetch(
+          `get_timetable.php?semester=${encodeURIComponent(
+            semester
+          )}&class=${encodeURIComponent(cls)}&room=${encodeURIComponent(
+            room
+          )}&department=${encodeURIComponent(department)}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            const tbody = document.getElementById("timetable").tBodies[0];
+            Array.from(tbody.rows).forEach((row) => {
+              Array.from(row.cells)
+                .slice(1)
+                .forEach((cell) => {
+                  cell.textContent = "";
+                  cell.colSpan = 1;
+                  cell.style.display = "";
+                });
+            });
+
+            const subjects = new Set();
+            const timeMap = {
+              "9:30 AM - 11:00 AM": 1,
+              "11:00 AM - 12:30 PM": 2,
+              "1:45 PM - 3:15 PM": 3,
+              "3:15 PM - 4:45 PM": 4,
+            };
+
+            data.forEach((item) => {
+              subjects.add(`${item.subject} - ${item.faculty}`);
+              const row = Array.from(tbody.rows).find(
+                (r) => r.cells[0].innerText === item.day
+              );
+              const colIndex = timeMap[item.time_slot];
+              if (row && colIndex) {
+                const cell = row.cells[colIndex];
+                if (item.two_sections == 1) {
+                  cell.colSpan = 2;
+                  cell.textContent = item.subject;
+                  const next = cell.nextElementSibling;
+                  if (next) next.style.display = "none";
+                } else {
+                  cell.textContent = item.subject;
+                }
+              }
+            });
+
+            const list = document.querySelector(".subject-list");
+            list.innerHTML = "";
+            subjects.forEach((s) => {
+              const li = document.createElement("li");
+              li.textContent = s;
+              list.appendChild(li);
+            });
+          })
+          .catch(console.error);
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        populateHeaderInfo();
+        fetchTimetable();
+        fetchSemesterDate(); // 👈 Add this line
+      });
+
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          const ref = document.referrer;
+
+          let redirectPage = "adlogin.html"; // default
+
+          if (ref.includes("staff2.html")) {
+            redirectPage = "faclogin.html";
+          } else if (ref.includes("stulog.html")) {
+            redirectPage = "stulogin.html";
+          } else if (ref.includes("hodct1.html")) {
+            redirectPage = "adlogin.html";
+          }
+
+          window.location.href = redirectPage;
+        }
+      }
+
+      function fetchSemesterDate() {
+        const { semester, class: cls, room, department } = getQueryParams();
+        fetch(
+          `get_sem_date.php?semester=${encodeURIComponent(
+            semester
+          )}&class=${encodeURIComponent(cls)}&room=${encodeURIComponent(
+            room
+          )}&department=${encodeURIComponent(department)}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            const para = document.getElementById("semesterStart");
+            if (data.status === "success") {
+              para.innerHTML = `<strong>𝑺𝒆𝒎𝒆𝒔𝒕𝒆𝒓 𝑪𝒐𝒎𝒎𝒆𝒏𝒄𝒆𝒔 𝑭𝒓𝒐𝒎: ${data.start_date}</strong>`;
+            } else {
+              para.innerHTML = `<strong>𝑺𝒆𝒎𝒆𝒔𝒕𝒆𝒓 𝑪𝒐𝒎𝒎𝒆𝒏𝒄𝒆𝒔 𝑭𝒓𝒐𝒎: Not Available</strong>`;
+            }
+          })
+          .catch(console.error);
+      }
+    </script>
+  </body>
+</html>

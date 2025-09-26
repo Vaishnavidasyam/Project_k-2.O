@@ -1,0 +1,157 @@
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: linear-gradient(90deg, #685dda, #4c45b2); /* Stylish gradient */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styling */
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: white; /* Changed color to white */
+  text-transform: uppercase; /* Makes it all caps */
+  letter-spacing: 1.5px; /* Adds spacing between letters */
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 12px;
+  background-color: #fff; /* White background */
+  padding: 5px; /* Adds some spacing */
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white; /* Changed to white */
+  transition: color 0.3s, transform 0.2s;
+  font-size: 1.1em;
+  font-weight: 500;
+  text-transform: uppercase; /* Uppercase text */
+}
+
+.nav-links a:hover {
+  color: #f4e04d; /* Golden yellow on hover */
+  transform: scale(1.1); /* Slightly enlarges */
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  height: 80vh;
+}
+
+.hero-image {
+  width: 70%;
+  background: url("tt1.jpg") no-repeat center center/cover;
+}
+
+.hero-text {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+}
+/* Hero Text */
+.hero-text h1 {
+  font-size: 3em; /* Increased size */
+  font-weight: bold;
+  text-transform: uppercase; /* Uppercase for emphasis */
+  color: #4c45b2; /* Deep purple color */
+  letter-spacing: 2px; /* Adds spacing between letters */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.hero-text p {
+  font-size: 1.2em;
+  line-height: 1.6; /* Improves readability */
+  color: #333; /* Dark grey for contrast */
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", sans-serif; /* Adds a modern, clean font */
+}
+
+.hero-buttons .btn {
+  padding: 10px 20px;
+  background-color: #685dda;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  color: #fff;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.hero-buttons .btn:hover {
+  background-color: #5a4bbf;
+}
+/* Footer */
+.footer {
+  width: 100%;
+  background-color: rgba(248, 248, 248, 0.9);
+  padding: 20px 0; /* Reduced padding to reduce height */
+  text-align: center;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.footer-logo {
+  font-size: 1em; /* Reduced logo font size */
+  color: #685dda;
+  font-weight: bold;
+  margin-bottom: 10px; /* Reduced bottom margin */
+}
+
+.footer-text {
+  font-size: 0.5em; /* Reduced font size */
+  color: #777;
+  margin-bottom: 10px; /* Reduced bottom margin */
+}
+
+.footer-link {
+  color: #685dda;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Reduced gap between social icons */
+}
+
+.footer-social-icon {
+  font-size: 1.2em; /* Reduced icon size */
+  color: #555;
+  transition: color 0.3s;
+}
+
+.footer-social-icon:hover {
+  color: #685dda;
+}

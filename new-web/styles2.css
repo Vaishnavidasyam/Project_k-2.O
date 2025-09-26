@@ -1,0 +1,177 @@
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+/* Header background changed to gray */
+.header {
+  background-color: gray;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white; /* Changed to white */
+  transition: color 0.3s, transform 0.2s;
+  font-size: 1.1em;
+  font-weight: 500;
+  text-transform: uppercase; /* Uppercase text */
+}
+
+.nav-links a:hover {
+  color: #f4e04d; /* Golden yellow on hover */
+  transform: scale(1.1); /* Slightly enlarges */
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(
+    90deg,
+    rgb(216, 220, 250) 0%,
+    hsla(0, 0%, 89%, 1) 100%
+  );
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #020000;
+  font-size: 36px; /* Increase font size */
+  font-weight: bold; /* Make it bold */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 2px; /* Increase spacing between letters */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add text shadow */
+  margin-bottom: 30px; /* Add spacing below heading */
+}
+
+h2 {
+  text-align: center;
+  color: #020000;
+  font-size: 36px; /* Increase font size */
+  font-weight: bold; /* Make it bold */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 2px; /* Increase spacing between letters */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add text shadow */
+  margin-bottom: 30px; /* Add spacing below heading */
+}
+.profiles {
+  display: flex;
+  justify-content: center; /* Center blocks */
+  align-items: stretch; /* Ensure equal height */
+  gap: 30px; /* Increase space between blocks */
+  flex-wrap: wrap; /* Wrap on smaller screens */
+}
+
+.profile {
+  flex: 1; /* Make all blocks equal width */
+  max-width: 35%; /* Increased max-width to make blocks larger */
+  min-width: 300px; /* Prevent blocks from getting too small */
+  background: linear-gradient(
+    135deg,
+    #f3f3f3,
+    #ffffff
+  ); /* Gradient background */
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.profile:hover {
+  transform: translateY(-10px); /* Slight hover lift */
+  box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.profile img {
+  width: 80%;
+  height: 240px; /* Increased image height */
+  object-fit: cover;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.profile .content {
+  padding: 30px; /* Increased padding inside content */
+}
+
+.profile h2 {
+  font-size: 24px; /* Slightly larger text size */
+  font-weight: bold;
+  color: #685dda;
+  letter-spacing: 1px;
+}
+
+.profile p {
+  font-size: 16px; /* Slightly larger text size */
+  color: #444;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.profile a {
+  display: inline-flex;
+  align-items: center; /* Align image and text vertically */
+  margin-top: 10px;
+  padding: 10px 20px; /* Adjust padding to keep a balanced button */
+  background-color: #685dda;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+  flex-direction: row-reverse; /* Put image to the right of the text */
+}
+
+.profile a img {
+  width: 20px; /* Set the image size */
+  height: 20px; /* Ensure the image is square */
+  margin-left: 8px; /* Space between the image and text */
+}
+
+.profile a:hover {
+  background-color: #6257dc;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 900px) {
+  .profiles {
+    flex-direction: column; /* Stack blocks vertically */
+    align-items: center;
+  }
+
+  .profile {
+    max-width: 90%; /* Increase width on small screens */
+  }
+}

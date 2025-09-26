@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Provisional Time-Table</title>
+    <link rel="stylesheet" href="styles5.css" />
+    <link rel="icon" href="pic.png" type="image/png" />
+    <style>
+      /* Modal Styling */
+      .header {
+        width: 100%;
+        padding: 10px 30px;
+        background-color: gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+      }
+      .back {
+        background-color: gray;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+      }
+      .btn-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.5em;
+      }
+      .logo-icon {
+        height: 40px;
+        margin-right: 10px;
+        background: none;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      /* Body */
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("back.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        max-width: 900px;
+        margin: 120px auto 40px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+      }
+
+      .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+
+      th {
+        background-color: gray; /* already gray */
+        color: white;
+      }
+
+      .back-btn {
+        background: gray;
+        color: white;
+      }
+      .back-btn:hover {
+        background: #444;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header" style="background-color: gray">
+      <div class="logo">
+        <img src="icon.png" class="logo-icon" alt="Logo" />
+        <span>𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎</span>
+      </div>
+      <nav class="nav-links">
+        <a onclick="navigateToHome()">𝑯𝒐𝒎𝒆</a>
+        <a onclick="showInfo('about')">𝑨𝒃𝒐𝒖𝒕</a>
+        <a onclick="showInfo('contact')">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+        <a onclick="logout()">𝑳𝒐𝒈𝒐𝒖𝒕</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+      <h1>𝑱𝑵𝑻𝑼𝑯 𝑪𝑶𝑳𝑳𝑬𝑮𝑬 𝑶𝑭 𝑬𝑵𝑮𝑰𝑵𝑬𝑬𝑹𝑰𝑵𝑮 𝑯𝒀𝑫𝑬𝑹𝑨𝑩𝑨𝑫</h1>
+      <h2>𝑫𝒆𝒑𝒕 𝒐𝒇 𝑪𝒐𝒎𝒑𝒖𝒕𝒆𝒓 𝑺𝒄𝒊𝒆𝒏𝒄𝒆 𝒂𝒏𝒅 𝑬𝒏𝒈𝒊𝒏𝒆𝒆𝒓𝒊𝒏𝒈</h2>
+      <h3 id="facultyNameDisplay"></h3>
+
+      <h4>𝑷𝑹𝑶𝑽𝑰𝑺𝑰𝑶𝑵𝑨𝑳 𝑻𝑰𝑴𝑬-𝑻𝑨𝑩𝑳𝑬</h4>
+
+      <!-- Timetable Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>𝑫𝑨𝒀</th>
+            <th>9:30 𝑨𝑴 - 11:00 𝑨𝑴</th>
+            <th>11:00 𝑨𝑴 - 12:30 𝑷𝑴</th>
+            <th>1:45 𝑷𝑴 - 3:15 𝑷𝑴</th>
+            <th>3:15 𝑷𝑴 - 4:45 𝑷𝑴</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>𝑴𝑶𝑵𝑫𝑨𝒀</td>
+            <td id="MONDAY_1"></td>
+            <td id="MONDAY_2"></td>
+            <td id="MONDAY_3"></td>
+            <td id="MONDAY_4"></td>
+          </tr>
+          <tr>
+            <td>𝑻𝑼𝑬𝑺𝑫𝑨𝒀</td>
+            <td id="TUESDAY_1"></td>
+            <td id="TUESDAY_2"></td>
+            <td id="TUESDAY_3"></td>
+            <td id="TUESDAY_4"></td>
+          </tr>
+          <tr>
+            <td>𝑾𝑬𝑫𝑵𝑬𝑺𝑫𝑨𝒀</td>
+            <td id="WEDNESDAY_1"></td>
+            <td id="WEDNESDAY_2"></td>
+            <td id="WEDNESDAY_3"></td>
+            <td id="WEDNESDAY_4"></td>
+          </tr>
+          <tr>
+            <td>𝑻𝑯𝑼𝑹𝑺𝑫𝑨𝒀</td>
+            <td id="THURSDAY_1"></td>
+            <td id="THURSDAY_2"></td>
+            <td id="THURSDAY_3"></td>
+            <td id="THURSDAY_4"></td>
+          </tr>
+          <tr>
+            <td>𝑭𝑹𝑰𝑫𝑨𝒀</td>
+            <td id="FRIDAY_1"></td>
+            <td id="FRIDAY_2"></td>
+            <td id="FRIDAY_3"></td>
+            <td id="FRIDAY_4"></td>
+          </tr>
+          <tr>
+            <td>𝑺𝑨𝑻𝑼𝑹𝑫𝑨𝒀</td>
+            <td id="SATURDAY_1"></td>
+            <td id="SATURDAY_2"></td>
+            <td id="SATURDAY_3"></td>
+            <td id="SATURDAY_4"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Class Details -->
+      <div class="class-details-container">
+        <h4>𝑪𝒍𝒂𝒔𝒔 𝑫𝒆𝒕𝒂𝒊𝒍𝒔</h4>
+        <ul id="classDetailsList"></ul>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <button class="back-btn" onclick="goBack()">
+          <img src="backs.png" alt="Back" class="btn-icon" />𝑩𝒂𝒄𝒌
+        </button>
+      </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>About This Website</h2>
+        <p>
+          This web page displays a provisional timetable for B.Tech students at
+          JNTUH College of Engineering Hyderabad.
+        </p>
+        <p>
+          The timetable updates dynamically based on the semester, section,
+          date, and room parameters in the URL.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('contactModal')">&times;</span>
+        <h2>Contact Us</h2>
+        <p><strong>Name:</strong> SHAIK FAYAZ</p>
+        <p><strong>Email:</strong> sahaikfayaz73822@gmail.com</p>
+        <p>
+          <strong>Address:</strong> Dept. of CSE, JNTUH, Hyderabad, Kukatpally
+        </p>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      function getSlotNumber(time) {
+        const timeMap = {
+          "9:30 AM - 11:00 AM": 1,
+          "11:00 AM - 12:30 PM": 2,
+          "1:45 PM - 3:15 PM": 3,
+          "3:15 PM - 4:45 PM": 4,
+        };
+        return timeMap[time] || 0;
+      }
+
+      function goBack() {
+        window.history.back();
+      }
+
+      function navigateToHome() {
+        window.location.href = "first.html";
+      }
+
+      function showInfo(type) {
+        const id = type === "about" ? "aboutModal" : "contactModal";
+        document.getElementById(id).style.display = "flex";
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      window.onclick = (event) => {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+        }
+      };
+
+      const facultyName = getQueryParam("name");
+      if (facultyName) {
+        document.getElementById("facultyNameDisplay").textContent =
+          "Faculty: " + decodeURIComponent(facultyName);
+
+        fetch(`get_tt.php?faculty=${encodeURIComponent(facultyName)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const detailsList = document.getElementById("classDetailsList");
+            const seen = new Set();
+
+            data.forEach((item) => {
+              const slotNumber = getSlotNumber(item.time);
+              const cellId = `${item.day.toUpperCase()}_${slotNumber}`;
+              const cell = document.getElementById(cellId);
+              if (cell) {
+                cell.textContent = item.subject;
+              }
+
+              const key = `${item.subject}_${item.section}_${item.semester}_${item.room}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="hodCT3.html?semester=${encodeURIComponent(
+                  item.semester
+                )}&class=${encodeURIComponent(
+                  item.section
+                )}&room=${encodeURIComponent(
+                  item.room
+                )}&department=cse" style="text-decoration: none; color: black;">
+  ${item.subject} - Section ${item.section}, Semester ${item.semester}, ${
+                  item.room
+                }
+</a>`;
+                detailsList.appendChild(li);
+              }
+            });
+          });
+      }
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          // Example: clear session storage or cookies if used
+          // sessionStorage.clear();
+          // Redirect to login or homepage
+          window.location.href = "faclogin.html"; // change this to your actual login page
+        }
+      }
+    </script>
+  </body>
+</html>

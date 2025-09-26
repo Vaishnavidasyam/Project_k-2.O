@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance</title>
+    <link rel="stylesheet" href="styles11.css" />
+    <link rel="icon" href="pic.png" type="image/png" />
+    <style>
+      /* Page background */
+
+      /* Page background */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("back.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: gray;
+        color: white;
+        padding: 15px 30px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .logo-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+
+      /* Container below fixed header */
+      .container {
+        max-width: 900px;
+        margin: 100px auto 40px; /* space below header */
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+      }
+
+      /* Center-aligned heading */
+      .attendance-header h1,
+      .attendance-header .details,
+      .attendance-header h2 {
+        text-align: center;
+      }
+      /* Attendance Header */
+      .attendance-header h1 {
+        margin: 0 0 10px;
+        font-size: 1.5rem;
+      }
+      .attendance-header .details {
+        margin-top: 5px;
+        font-size: 1rem;
+      }
+      .attendance-header h2 {
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      /* Table wrapper */
+      .table-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      /* Table styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      thead th {
+        background-color: gray;
+        color: white;
+        padding: 10px;
+      }
+      tbody td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      tbody tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+      tbody tr:hover {
+        background: #f1f1f1;
+      }
+
+      /* Buttons */
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .back,
+      .save-btn {
+        background-color: gray;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+      }
+      .back:hover,
+      .save-btn:hover {
+        background: #555;
+      }
+      .btn-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+      }
+      .close {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #888;
+      }
+      .close:hover {
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <img src="icon.png" class="logo-icon" alt="Logo" />
+        <span>𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎</span>
+      </div>
+      <nav class="nav-links">
+        <a onclick="navigateToHome()">𝑯𝒐𝒎𝒆</a>
+        <a onclick="showInfo('about')">𝑨𝒃𝒐𝒖𝒕</a>
+        <a onclick="showInfo('contact')">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+        <a onclick="logout()">𝑳𝒐𝒈𝒐𝒖𝒕</a>
+      </nav>
+    </header>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>About This Website</h2>
+        <p>
+          This web page displays a provisional timetable for B.Tech students at
+          JNTUH College of Engineering Hyderabad.
+        </p>
+        <p>
+          The timetable updates dynamically based on the semester, section,
+          date, and room parameters in the URL.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('contactModal')">&times;</span>
+        <h2>Contact Us</h2>
+        <p><strong>Name:</strong> SHAIK FAYAZ</p>
+        <p><strong>Email:</strong> sahaikfayaz73822@gmail.com</p>
+        <p>
+          <strong>Address:</strong> Dept. of CSE, JNTUH, Hyderabad, Kukatpally
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- University and session details -->
+      <div class="attendance-header">
+        <h1>𝑱𝒂𝒘𝒂𝒉𝒂𝒓𝒍𝒂𝒍 𝑵𝒆𝒉𝒓𝒖 𝑻𝒆𝒄𝒉𝒏𝒐𝒍𝒐𝒈𝒊𝒄𝒂𝒍 𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑯𝒚𝒅𝒆𝒓𝒂𝒃𝒂𝒅</h1>
+        <div class="details">
+          <span>𝑺𝒆𝒎𝒆𝒔𝒕𝒆𝒓: <strong id="semDisplay"></strong></span> |
+          <span>𝑪𝒍𝒂𝒔𝒔: <strong id="classDisplay"></strong></span> |
+          <span>𝑫𝒂𝒕𝒆: <strong id="dateDisplay"></strong></span>
+        </div>
+      </div>
+
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th>𝑺.𝑵𝒐</th>
+            <th>N𝒂𝒎𝒆</th>
+            <th>𝑹𝒐𝒍𝒍 𝑵𝒐</th>
+            <th>𝑷𝒓𝒆𝒔𝒆𝒏𝒕</th>
+            <th>𝑨𝒃𝒔𝒆𝒏𝒕</th>
+          </tr>
+        </thead>
+        <tbody id="studentBody"></tbody>
+      </table>
+
+      <div class="buttons">
+        <button class="back" onclick="navigateToHome()">
+          <img src="backs.png" alt="Back" class="btn-icon" /> 𝑩𝒂𝒄𝒌
+        </button>
+        <button class="save-btn" onclick="saveAttendance()">
+          <img src="save.png" alt="Save" class="btn-icon" /> 𝑺𝒂𝒗𝒆
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Modal control functions
+      function navigateToHome() {
+        window.location.href = "first.html";
+      }
+      function showInfo(type) {
+        const id = type === "about" ? "aboutModal" : "contactModal";
+        document.getElementById(id).style.display = "flex";
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+      window.onclick = (event) => {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+        }
+      };
+      // Attendance logic
+      // Get the URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const facultyName = urlParams.get("name");
+      const semester = urlParams.get("semester");
+      const classParam = urlParams.get("class");
+      const subject = decodeURIComponent(urlParams.get("subject")); // Decode the subject
+      const dateParam =
+        urlParams.get("date") || new Date().toISOString().split("T")[0];
+
+      // Display session details
+      document.getElementById("semDisplay").textContent = semester || "-";
+      document.getElementById("classDisplay").textContent = classParam || "-";
+      document.getElementById("dateDisplay").textContent = dateParam;
+
+      // Dynamically setting the title
+      document.title = subject + " - Attendance"; // Page title will include the subject
+
+      // Display the subject in the attendance header
+      const subjectDisplayElement = document.createElement("h2");
+      subjectDisplayElement.textContent = "Subject: " + subject;
+      document
+        .querySelector(".attendance-header")
+        .appendChild(subjectDisplayElement);
+
+      // Fetch the attendance data
+      function fetchAttendanceData() {
+        fetch(
+          `load_attendance.php?facultyName=${facultyName}&semester=${semester}&class=${classParam}&subject=${subject}&date=${dateParam}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            const tbody = document.getElementById("studentBody");
+            tbody.innerHTML = "";
+
+            // Loop through the student data and create the rows dynamically
+            data.forEach((student, i) => {
+              const tr = document.createElement("tr");
+              tr.dataset.roll = student.roll;
+              tr.dataset.name = student.name;
+              tr.dataset.attendance = "";
+              tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${student.name}</td>
+          <td>${student.roll}</td>
+          <td><button class="present-btn" onclick="markPresent(this)">Present</button></td>
+          <td><button class="absent-btn" onclick="markAbsent(this)">Absent</button></td>
+        `;
+              tbody.appendChild(tr);
+            });
+          })
+          .catch((err) => console.error("Error fetching attendance:", err));
+      }
+      // Fetch saved attendance data and update the button states accordingly
+      // Fetch saved attendance data and update the button states accordingly
+      function fetchSavedAttendance() {
+        fetch(
+          `savedattendance.php?facultyName=${facultyName}&semester=${semester}&class=${classParam}&subject=${subject}&date=${dateParam}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            // Loop through the student data and set the attendance status
+            data.forEach((attendance) => {
+              const row = document.querySelector(
+                `#studentBody tr[data-roll="${attendance.roll_no}"]`
+              );
+
+              if (row) {
+                const presentBtn = row.querySelector(".present-btn");
+                const absentBtn = row.querySelector(".absent-btn");
+
+                if (attendance.attendance_status === "present") {
+                  presentBtn.classList.add("active");
+                  absentBtn.classList.remove("active");
+                  // Set the background color to green for present
+                  presentBtn.style.backgroundColor = "green";
+                  absentBtn.style.backgroundColor = "";
+                } else if (attendance.attendance_status === "absent") {
+                  absentBtn.classList.add("active");
+                  presentBtn.classList.remove("active");
+                  // Set the background color to red for absent
+                  absentBtn.style.backgroundColor = "red";
+                  presentBtn.style.backgroundColor = "";
+                }
+              }
+            });
+          })
+          .catch((err) =>
+            console.error("Error fetching saved attendance:", err)
+          );
+      }
+
+      // Call this function after fetching attendance data or page load
+      function markPresent(btn) {
+        const tr = btn.closest("tr");
+        tr.dataset.attendance = "present";
+        btn.classList.add("active");
+        btn.style.backgroundColor = "green";
+        const absentBtn = tr.querySelector(".absent-btn");
+        absentBtn.classList.remove("active");
+        absentBtn.style.backgroundColor = "";
+      }
+
+      function markAbsent(btn) {
+        const tr = btn.closest("tr");
+        tr.dataset.attendance = "absent";
+        btn.classList.add("active");
+        btn.style.backgroundColor = "red";
+        const presentBtn = tr.querySelector(".present-btn");
+        presentBtn.classList.remove("active");
+        presentBtn.style.backgroundColor = "";
+      }
+
+      // Call this function after saving attendance
+      function saveAttendance() {
+        const rows = document.querySelectorAll("#studentBody tr");
+        const attendanceData = [];
+        let unmarked = false;
+
+        rows.forEach((tr) => {
+          const roll = tr.dataset.roll;
+          const name = tr.dataset.name;
+          const attendance = tr.dataset.attendance;
+
+          if (!attendance) {
+            unmarked = true;
+            tr.style.backgroundColor = "#ffe6e6"; // highlight unmarked
+            return;
+          }
+
+          attendanceData.push({ roll, name, attendance });
+        });
+
+        if (unmarked) {
+          alert("Please mark all students as Present or Absent before saving.");
+          return;
+        }
+
+        if (attendanceData.length === 0) {
+          alert("No students found.");
+          return;
+        }
+
+        let savedCount = 0;
+        let errorCount = 0;
+
+        attendanceData.forEach((student) => {
+          fetch("update_attendance.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              roll: student.roll,
+              name: student.name,
+              attendance: student.attendance,
+              faculty: facultyName,
+              semester,
+              class: classParam,
+              subject,
+              date: dateParam,
+            }),
+          })
+            .then((res) => {
+              if (!res.ok) throw new Error("Network response was not OK");
+              return res.text();
+            })
+            .then((msg) => {
+              console.log(`Saved ${student.roll}: ${msg}`);
+              savedCount++;
+            })
+            .catch((err) => {
+              console.error(`Error saving ${student.roll}:`, err);
+              errorCount++;
+            })
+            .finally(() => {
+              if (savedCount + errorCount === attendanceData.length) {
+                if (errorCount === 0) {
+                  alert("Attendance saved successfully.");
+                } else if (savedCount === 0) {
+                  alert("Failed to save attendance. Please try again.");
+                } else {
+                  alert(
+                    `Some attendance records were saved, but ${errorCount} failed.`
+                  );
+                }
+              }
+            });
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        // Load timetable when the page is loaded
+        fetchAttendanceData(); // Fetch attendance data as well
+        fetchSavedAttendance(); // Fetch saved attendance and update button states
+      });
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          // Example: clear session storage or cookies if used
+          // sessionStorage.clear();
+          // Redirect to login or homepage
+          window.location.href = "faclogin.html"; // change this to your actual login page
+        }
+      }
+    </script>
+  </body>
+</html>

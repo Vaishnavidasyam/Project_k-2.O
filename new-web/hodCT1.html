@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timetable Management</title>
+    <link rel="stylesheet" href="styles13.css" />
+    <link rel="icon" href="pic.png" type="image/png" />
+  </head>
+  <style>/* Reset styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+.back,
+.add-btn,
+.save-btn,.start-semester-btn,
+.end-semester-btn {
+  background: gray; /* ensure all primary buttons are gray */
+  color: white;
+}
+
+.back:hover,
+.add-btn:hover,
+.save-btn:hover,
+.start-semester-btn:hover,
+.end-semester-btn:hover {
+  background: #555;
+}
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+}
+/* Body Background */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("back.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: gray;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Logo Styling */
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+}
+.logo-icon {
+  height: 40px;
+  margin-right: 10px;
+  background: none;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s, transform 0.2s;
+  font-size: 1.1em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.nav-links a:hover {
+  color: #444;
+  transform: scale(1.1);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
+}
+
+/* Popup Content */
+.popup-content {
+  background-color: #fff;
+  padding: 40px 50px;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.popup-content.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  color: black;
+}
+
+h3 {
+  font-size: 1.6em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.popup-content input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.popup-close:hover {
+  color: #a6a6a6;
+}
+
+/* Menu Container */
+.menu-container {
+  position: relative;
+}
+
+.menu-toggle {
+  background-color: gray;
+  color: white;
+  font-size: 2em;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Menu Items Styling */
+.menu-items {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  width: 220px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-items.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* Menu Buttons */
+.menu-btn {
+  margin: 0;
+  padding: 14px 20px;
+  font-size: 1.05em;
+  width: 100%;
+  text-align: center;
+  border: none;
+  background-color: #f5f5f5; /* light gray background */
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  line-height: 1.4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.menu-btn:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.menu-btn:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.menu-btn:nth-child(even) {
+  background-color: #ffffff; /* alternate white background */
+}
+
+.menu-btn:hover {
+  background-color: #eaeaea; /* hover effect */
+}
+#semesterStartNotice {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: darkgreen;
+  margin: 15px 0;
+}
+
+/* Container */
+.container {
+  position: relative;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+/* Semester control buttons */
+.start-semester-btn,
+.end-semester-btn {
+  background: gray;
+  color: #fff;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.start-semester-btn:hover,
+.end-semester-btn:hover {
+  background: #686868;
+}
+
+/* exact placement */
+.start-semester-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.end-semester-btn {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Title */
+h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+/* Menu Styling */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.menu a {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #8a8a8a;
+  text-decoration: none;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.menu a:hover {
+  color: #7c7c7c;
+  transform: scale(1.05);
+}
+
+/* Add New Subject Button */
+.add-subject-btn,
+button,
+.button {
+  background-color: gray;
+  color: #fff;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover,
+.button:hover,
+.add-subject-btn:hover {
+  background-color: #686868;
+}
+
+/* Back Button */
+.back-btn {
+  background-color: #4b5563;
+}
+
+.back-btn:hover {
+  background-color: #374151;
+}
+
+/* Timetable Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fefefe;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px 14px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background-color: gray;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+td select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+td input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-top: 6px;
+  accent-color: gray;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Footer Styling */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.footer button:nth-child(2) {
+  margin-left: auto;
+}
+
+/* Manage Timetable Section */
+#semesterSection {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black;
+  margin-top: 20px;
+}
+</style>
+  <body>
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <img src="icon.png" alt="Logo" class="logo-icon" />
+         𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎
+        </div>
+        <nav class="nav-links">
+          <a href="first.html">𝑯𝒐𝒎𝒆</a>
+          <a onclick="showAbout()">𝑨𝒃𝒐𝒖𝒕</a>
+          <a onclick="showContact()">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+            <a onclick="logout()">𝑳𝒐𝒈𝒐𝒖𝒕</a>
+
+        </nav>
+      </header>
+
+      <!-- About Modal -->
+      <div id="aboutModal" class="popup-overlay">
+        <div class="popup-content">
+          <button class="popup-close" onclick="closeModal('aboutModal')">
+            ×
+          </button>
+          <h2>𝑨𝒃𝒐𝒖𝒕 𝑻𝒉𝒊𝒔 𝑾𝒆𝒃𝒔𝒊𝒕𝒆</h2>
+        <p>
+          𝙏𝙞𝙢𝙚𝙏𝙖𝙗𝙡𝙚 𝙈𝙖𝙣𝙖𝙜𝙚𝙢𝙚𝙣𝙩 𝙎𝙮𝙨𝙩𝙚𝙢 𝙨𝙞𝙢𝙥𝙡𝙞𝙛𝙞𝙚𝙨 𝙩𝙝𝙚 𝙥𝙧𝙤𝙘𝙚𝙨𝙨 𝙤𝙛 𝙩𝙞𝙢𝙚𝙩𝙖𝙗𝙡𝙚
+          𝙘𝙧𝙚𝙖𝙩𝙞𝙤𝙣 𝙖𝙣𝙙 𝙚𝙣𝙝𝙖𝙣𝙘𝙚𝙨 𝙩𝙝𝙚 𝙤𝙫𝙚𝙧𝙖𝙡𝙡 𝙖𝙘𝙖𝙙𝙚𝙢𝙞𝙘 𝙚𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙚 𝙛𝙤𝙧 𝙨𝙩𝙪𝙙𝙚𝙣𝙩𝙨 𝙖𝙣𝙙
+          𝙛𝙖𝙘𝙪𝙡𝙩𝙮. 𝙏𝙝𝙞𝙨 𝙥𝙖𝙜𝙚 𝙨𝙚𝙧𝙫𝙚𝙨 𝙖𝙨 𝙩𝙝𝙚 𝙨𝙩𝙖𝙧𝙩𝙞𝙣𝙜 𝙞𝙣𝙩𝙚𝙧𝙛𝙖𝙘𝙚 𝙬𝙞𝙩𝙝 𝙣𝙖𝙫𝙞𝙜𝙖𝙩𝙞𝙤𝙣
+          𝙖𝙣𝙙 𝙖𝙪𝙩𝙝𝙚𝙣𝙩𝙞𝙘𝙖𝙩𝙞𝙤𝙣 𝙛𝙚𝙖𝙩𝙪𝙧𝙚𝙨.
+        </p>
+        </div>
+      </div>
+      <!-- Contact Modal -->
+      <div id="contactModal" class="popup-overlay">
+        <div class="popup-content">
+          <button class="popup-close" onclick="closeModal('contactModal')">
+            ×
+          </button>
+            <h2>𝑪𝒐𝒏𝒕𝒂𝒄𝒕 𝑼𝒔</h2>
+           <p>
+              <strong>𝑬𝒎𝒂𝒊𝒍:</strong> 𝒔𝒉𝒂𝒊𝒌𝒇𝒂𝒚𝒂𝒛73822@𝒈𝒎𝒂𝒊𝒍.𝒄𝒐𝒎<br>
+              <strong>𝑷𝒉𝒐𝒏𝒆:</strong> 7382259565<br>
+              <strong>𝑨𝒅𝒅𝒓𝒆𝒔𝒔:</strong> 𝑲𝒖𝒌𝒂𝒕𝒑𝒂𝒍𝒍𝒚, 𝑯𝒚𝒅𝒆𝒓𝒂𝒃𝒂𝒅, 𝑰𝒏𝒅𝒊𝒂<br>
+              <strong>𝑭𝒐𝒍𝒍𝒐𝒘 𝒖𝒔:</strong> 𝑭𝒂𝒄𝒆𝒃𝒐𝒐𝒌 | 𝑻𝒘𝒊𝒕𝒕𝒆𝒓 | 𝑰𝒏𝒔𝒕𝒂𝒈𝒓𝒂𝒎
+            </p>
+        </div>
+      </div>
+
+    <div class="container">
+
+      <!-- Menu -->
+      <div class="menu-container">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div id="menuItems" class="menu-items">
+          <button class="menu-btn" onclick="openAddSubjectPopup()">
+            𝑨𝒅𝒅 𝑺𝒖𝒃𝒋𝒆𝒄𝒕
+          </button>
+          <button class="menu-btn" onclick="goToCT2()">
+            𝑨𝒔𝒔𝒊𝒈𝒏 𝑭𝒂𝒄𝒖𝒍𝒕𝒚 𝒕𝒐 𝑺𝒖𝒃𝒋𝒆𝒄𝒕𝒔
+          </button>
+          <button class="menu-btn" onclick="goToCT3()">𝑽𝒊𝒆𝒘 𝑻𝒊𝒎𝒆𝒕𝒂𝒃𝒍𝒆</button>
+          <button class="menu-btn" onclick="goToCT4()">𝑨𝒅𝒅 𝑺𝒕𝒖𝒅𝒆𝒏𝒕𝒔</button>
+        </div>
+      </div>
+      <button class="start-semester-btn" onclick="startSemester()">
+  Start Semester
+</button>
+
+      <h2>𝑴𝒂𝒏𝒂𝒈𝒆 𝑻𝒊𝒎𝒆𝒕𝒂𝒃𝒍𝒆</h2>
+      <div id="semesterStartNotice" style="text-align: center; font-weight: 500; font-size: 1.1rem; color: rgb(0, 0, 0); margin: 15px 0;">Semester Commences from: </div>
+
+      <div id="semesterSection">
+        𝑪𝒍𝒂𝒔𝒔: <span id="class"></span> | 𝑺𝒆𝒄𝒕𝒊𝒐𝒏: <span id="section"></span>
+      </div>
+
+      <!-- Timetable -->
+      <table id="timetable">
+        <thead>
+          <tr>
+            <th>𝑫𝒂𝒚</th>
+            <th>9:30 𝑨𝑴 – 11:00 𝑨𝑴<br /><small>(2 𝒔𝒆𝒄𝒕𝒊𝒐𝒏𝒔)</small></th>
+            <th>11:00 𝑨𝑴 – 12:30 𝑷𝑴</th>
+            <th>1:45 𝑷𝑴 – 3:15 𝑷𝑴<br /><small>(2 𝒔𝒆𝒄𝒕𝒊𝒐𝒏𝒔)</small></th>
+            <th>3:15 𝑷𝑴 – 4:45 𝑷𝑴</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Monday–Saturday -->
+          <tr data-day="Monday">
+            <td>𝑴𝒐𝒏𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr data-day="Tuesday">
+            <td>𝑻𝒖𝒆𝒔𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr data-day="Wednesday">
+            <td>𝑾𝒆𝒅𝒏𝒆𝒔𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr data-day="Thursday">
+            <td>𝑻𝒉𝒖𝒓𝒔𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr data-day="Friday">
+            <td>𝑭𝒓𝒊𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr data-day="Saturday">
+            <td>𝑺𝒂𝒕𝒖𝒓𝒅𝒂𝒚</td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="9:30 AM - 11:00 AM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="11:00 AM - 12:30 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+            <td class="slot two-slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="1:45 PM - 3:15 PM">
+                  <option value="">Select Subject</option></select
+                ><input type="checkbox" class="two-section-checkbox" />
+              </div>
+            </td>
+            <td class="slot">
+              <div class="cell-group">
+                <select class="subjectDropdown" data-time="3:15 PM - 4:45 PM">
+                  <option value="">Select Subject</option>
+                </select>
+              </div>
+            </td>
+          </tr> 
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <button onclick="window.history.back()">   <img src="backs.png" alt="Back" class="btn-icon" />𝑩𝒂𝒄𝒌</button>
+        <button onclick="saveTimetable()"> <img src="save.png" alt="Save" class="btn-icon" />𝑺𝒂𝒗𝒆 𝑻𝒊𝒎𝒆𝒕𝒂𝒃𝒍𝒆</button>
+        <button class="end-semester-btn" onclick="endSemester()">
+  End Semester
+</button>
+      </div>
+    </div>
+
+    <!-- Add Subject Popup -->
+    <div id="addSubjectPopup" class="popup-overlay">
+      <div class="popup-content">
+        <button class="popup-close" onclick="closeAddSubjectPopup()">×</button>
+        <h3>Add New Subject</h3>
+        <input type="text" id="newSubjectName" placeholder="Enter Subject Name" />
+        <button onclick="saveNewSubject()">Save</button>
+      </div>
+    </div>
+
+    <script>
+      // Toggle menu
+         // Toggle menu display
+        function toggleMenu(event) {
+           const m = document.getElementById("menuItems");
+          m.style.display = m.style.display === "block" ? "none" : "block";
+        }
+      
+        // Close menu when clicking outside
+        document.addEventListener("click", function (event) {
+          const menu = document.getElementById("menuItems");
+          const toggleBtn = document.getElementById("menuToggle");
+      
+          if (menu.style.display === "block" && !menu.contains(event.target) && !toggleBtn.contains(event.target)) {
+            menu.style.display = "none";
+          }
+        });
+       
+      // Get URL params
+      function getQueryParams() {
+        const p = new URLSearchParams(window.location.search);
+        return {
+          semester: p.get("semester"),
+          class: p.get("class"),
+          room: p.get("room"),
+          department: p.get("department"),
+        };
+      }
+
+      // Move selected option just under placeholder
+      function moveOptionToTop(selectElem, val) {
+        const opts = Array.from(selectElem.options);
+        const idx = opts.findIndex((o) => o.value === val);
+        if (idx > 1) {
+          const opt = opts[idx];
+          selectElem.remove(idx);
+          selectElem.add(opt, selectElem.options[1]);
+        }
+      }// Function to start the semester and save the start date
+      function endSemester() {
+  const qp = getQueryParams();
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const yyyy = now.getFullYear();
+  const isoDate = `${yyyy}-${mm}-${dd}`;
+
+  if (!confirm("Are you sure you want to end the semester? This will clear timetable and subject data.")) return;
+
+  fetch("save_semester_date.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      semester: qp.semester,
+      class: qp.class,
+      room: qp.room,
+      department: qp.department,
+      type: "end",
+      date: isoDate
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+     if (data.status === "success") {
+    alert("Semester ended and data reset successfully!");
+
+    // Redirect back to stored hodlog page
+    const url = localStorage.getItem("hodlog_url");
+    if (url) {
+        window.location.href = url;
+    } else {
+        window.location.href = "hodlog.html"; // fallback
+    }
+} else {
+    alert("Error ending semester: " + data.message);
+}
+
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("An unexpected error occurred.");
+    });
+}
+
+function startSemester() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const yyyy = now.getFullYear();
+
+  const formattedDate = `${dd}/${mm}/${yyyy}`;      // For display
+  const isoDate = `${yyyy}-${mm}-${dd}`;            // For MySQL
+
+  const notice = document.getElementById("semesterStartNotice");
+  notice.textContent = `Semester Commencement From: ${formattedDate}`;
+
+  const qp = getQueryParams();
+
+  // Save start date to database
+  fetch("save_semester_date.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      semester: qp.semester,
+      class: qp.class,
+      room: qp.room,
+      department: qp.department,
+      type: "start",
+      date: isoDate
+    })
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        alert("Error saving date: " + data.message);
+      }
+    })
+    .catch(console.error);
+}
+// Inside DOMContentLoaded block
+const qp = getQueryParams();
+
+fetch(`get_semester_dates.php?${new URLSearchParams(qp)}`)
+  .then((res) => res.json())
+  .then((data) => {
+    if (data.status === "success" && data.start_date) {
+      const notice = document.getElementById("semesterStartNotice");
+      const [yyyy, mm, dd] = data.start_date.split("-");
+      const formatted = `${dd}/${mm}/${yyyy}`;
+      notice.textContent = `Semester Commencement From: ${formatted}`;
+    }
+  })
+  .catch(console.error);
+
+      // Setup two-section checkbox logic
+      function setupTwoSectionCheckboxes() {
+        document.querySelectorAll(".two-section-checkbox").forEach((cb) => {
+          cb.addEventListener("change", () => {
+            const cell = cb.closest("td");
+            const next = cell.nextElementSibling;
+            if (cb.checked) {
+              cell.colSpan = 2;
+              if (next) next.style.display = "none";
+            } else {
+              cell.colSpan = 1;
+              if (next) next.style.display = "";
+            }
+          });
+        });
+      }
+
+      // Fetch and pre-select saved entries
+      function fetchTimetable() {
+        const qp = getQueryParams();
+        return fetch(
+          `get_timetable.php?semester=${qp.semester}&class=${qp.class}&room=${qp.room}&department=${qp.department}`
+        )
+          .then((r) => r.json())
+          .then((data) => {
+            data.forEach((entry) => {
+              const day = entry.day;
+              const time = entry.time_slot;
+              const subj = entry.subject;
+              const two = +entry.two_sections === 1;
+              const sel = document.querySelector(
+                `tr[data-day="${day}"] select.subjectDropdown[data-time="${time}"]`
+              );
+              if (!sel) return;
+              sel.value = subj;
+              moveOptionToTop(sel, subj);
+              if (two) {
+                const cb = sel
+                  .closest("td")
+                  .querySelector(".two-section-checkbox");
+                cb.checked = true;
+                cb.dispatchEvent(new Event("change"));
+              }
+            });
+          })
+          .catch(console.error);
+      }
+
+      // Save timetable
+      function showAlert(message, type = 'success') {
+        const alertBox = document.createElement('div');
+        alertBox.textContent = message;
+        alertBox.style.position = 'fixed';
+        alertBox.style.top = '20px';
+        alertBox.style.right = '20px';
+        alertBox.style.padding = '15px 20px';
+        alertBox.style.zIndex = '9999';
+        alertBox.style.borderRadius = '8px';
+        alertBox.style.fontSize = '16px';
+        alertBox.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        alertBox.style.color = '#fff';
+        alertBox.style.backgroundColor = (type === 'success') ? '#28a745' : '#dc3545'; // green or red
+      
+        document.body.appendChild(alertBox);
+      
+        setTimeout(() => {
+          alertBox.remove();
+        }, 4000);
+      }
+      
+      function saveTimetable() {
+        const qp = getQueryParams();
+        const rows = document.querySelectorAll("#timetable tbody tr");
+        const payload = [];
+        rows.forEach((row) => {
+          const day = row.dataset.day;
+          row.querySelectorAll(".slot").forEach((slot) => {
+            const sel = slot.querySelector("select.subjectDropdown");
+            const cb = slot.querySelector(".two-section-checkbox");
+            if (!sel) return;
+            const subj = sel.value;
+            const time = sel.dataset.time;
+            const two = cb ? cb.checked : false;
+            if (subj)
+              payload.push({
+                day,
+                time,
+                subject: subj,
+                twoSections: two,
+                semester: qp.semester,
+                class: qp.class,
+                room: qp.room,
+                department: qp.department,
+              });
+          });
+        });
+      
+        fetch("save_timetable.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+        .then(response => response.text())
+        .then(data => {
+          if (data.trim() === "Success") {
+            showAlert("Timetable saved successfully!", "success");
+          } else {
+            showAlert(data, "error"); // Show server message if conflict or error
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          showAlert("An error occurred while saving!", "error");
+        });
+      }
+      
+
+      // Navigation
+      function goToCT2() {
+        window.location.href = `hodCT2.html?${new URLSearchParams(
+          getQueryParams()
+        )}`;
+      }
+      function goToCT3() {
+        window.location.href = `hodCT3.html?${new URLSearchParams(
+          getQueryParams()
+        )}`;
+      }
+      function goToCT4() {
+        window.location.href = `student_list.html?${new URLSearchParams(
+          getQueryParams()
+        )}`;
+      }
+
+      // Add Subject popup
+      function openAddSubjectPopup() {
+        document.getElementById("addSubjectPopup").style.display = "flex";
+      }
+      function closeAddSubjectPopup() {
+        document.getElementById("addSubjectPopup").style.display = "none";
+      }
+      function saveNewSubject() {
+        const name = document.getElementById("newSubjectName").value.trim();
+        if (!name) return alert("Please enter a subject name.");
+        const qp = getQueryParams();
+        fetch("save_subject.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            subject: name,
+            semester: qp.semester,
+            class: qp.class,
+            room: qp.room,
+            department: qp.department,
+          }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.status === "success") {
+              alert(data.message);
+              closeAddSubjectPopup();
+            } else alert("Error: " + data.message);
+          })
+          .catch(console.error);
+      }
+
+      // About/Contact modals
+      function showAbout() {
+        document.getElementById("aboutModal").style.display = "flex";
+      }
+      function showContact() {
+        document.getElementById("contactModal").style.display = "flex";
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+      window.onclick = (e) => {
+        if (e.target.classList.contains("popup-overlay"))
+          e.target.style.display = "none";
+      };
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        // Fetch query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const semester = urlParams.get('semester');
+        const className = urlParams.get('class');
+        const room = urlParams.get('room');
+        const department = urlParams.get('department');
+      
+        // Fetch subjects based on query parameters
+        fetch(`get_subjects.php?semester=${semester}&class=${className}&room=${room}&department=${department}`)
+          .then((r) => r.json())
+          .then((subjects) => {
+            document.querySelectorAll(".subjectDropdown").forEach((dd) => {
+              subjects.forEach((s) => dd.add(new Option(s, s)));
+            });
+          })
+          .then(() => {
+            setupTwoSectionCheckboxes();
+            return fetchTimetable();
+          })
+          .catch(console.error);
+            
+      
+        const qp = getQueryParams();
+        document.getElementById("class").innerText = qp.class;
+        document.getElementById("section").innerText = qp.semester;
+      });
+      function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    // Example: clear session storage or cookies if used
+    // sessionStorage.clear();
+    // Redirect to login or homepage
+    window.location.href = "adlogin.html"; // change this to your actual login page
+  }
+}
+
+    </script>
+  </body>
+</html>
