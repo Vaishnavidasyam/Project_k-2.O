@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Overview</title>
+    <link rel="stylesheet" href="styles11.css" />
+    <link rel="icon" href="pic.png" type="image/png" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("back.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      /* Fixed header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: gray;
+        color: white;
+        padding: 15px 30px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.5em;
+        color: white;
+      }
+
+      .logo-icon {
+        height: 40px;
+        margin-right: 10px;
+        background: none;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .nav-links a:hover {
+        color: #333333a9;
+      }
+      .container {
+        max-width: 900px;
+        margin: 120px auto 40px; /* Push below fixed header */
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow-x: auto; /* Enable horizontal scroll if needed */
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        overflow-x: auto;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background-color: gray;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+      tr:hover {
+        background: #f1f1f1;
+      }
+      /* Bar chart */
+      #bar-chart {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        overflow-x: auto;
+        gap: 10px;
+        height: 280px;
+        padding: 5px;
+        border-left: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+      }
+      .bar-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70px;
+      }
+      .bar {
+        width: 100%;
+        background-color: gray;
+        border-radius: 6px 6px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        color: white;
+        padding-bottom: 4px;
+      }
+      /* Back button */
+      .buttons {
+        text-align: left;
+      }
+      .back {
+        background-color: gray;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+      }
+      .btn-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+      }
+      /* Modal Base */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+      }
+      .modal-content {
+        background: white;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+      }
+      .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: #f1f1f1;
+        border-bottom: 1px solid #ddd;
+      }
+      .popup-header h2 {
+        margin: 0;
+        font-size: 1.2em;
+        color: #333;
+      }
+      .popup-header .close {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+      }
+      .popup-body {
+        padding: 20px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img src="icon.png" class="logo-icon" alt="Logo" />
+        <span>𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎</span>
+      </div>
+      <nav class="nav-links">
+        <a onclick="navigateToHome()">𝑯𝒐𝒎𝒆</a>
+        <a onclick="showInfo('about')">𝑨𝒃𝒐𝒖𝒕</a>
+        <a onclick="showInfo('contact')">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+        <a onclick="logout()">𝑳𝒐𝒈𝒐𝒖𝒕</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h2>𝑨𝒕𝒕𝒆𝒏𝒅𝒂𝒏𝒄𝒆 𝑶𝒗𝒆𝒓𝒗𝒊𝒆𝒘</h2>
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th>𝑺𝒖𝒃𝒋𝒆𝒄𝒕</th>
+            <th>𝑪𝒍𝒂𝒔𝒔𝒆𝒔 𝑨𝒕𝒕𝒆𝒏𝒅𝒆𝒅</th>
+            <th>𝑻𝒐𝒕𝒂𝒍 𝑪𝒍𝒂𝒔𝒔𝒆𝒔</th>
+            <th>𝑷𝒆𝒓𝒄𝒆𝒏𝒕𝒂𝒈𝒆</th>
+            <th>𝑭𝒂𝒄𝒖𝒍𝒕𝒚</th>
+            <th>𝑫𝒆𝒕𝒂𝒊𝒍𝒔</th>
+          </tr>
+        </thead>
+        <tbody id="studentBody"></tbody>
+      </table>
+
+      <h3>𝑨𝒕𝒕𝒆𝒏𝒅𝒂𝒏𝒄𝒆 𝑽𝒊𝒔𝒖𝒂𝒍𝒊𝒛𝒂𝒕𝒊𝒐𝒏</h3>
+      <div id="bar-chart"></div>
+
+      <div class="buttons">
+        <button class="back" onclick="window.history.back()">
+          <img src="backs.png" alt="Back" class="btn-icon" /> 𝑩𝒂𝒄𝒌
+        </button>
+      </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+      <div class="modal-content">
+        <div class="popup-header">
+          <h2 id="infoTitle"></h2>
+          <span class="close" id="closeInfoModal">&times;</span>
+        </div>
+        <div class="popup-body" id="infoBody"></div>
+      </div>
+    </div>
+    <!-- Details Modal -->
+    <div class="modal" id="detailsModal">
+      <div class="modal-content">
+        <div class="popup-header">
+          <h2 id="detailsTitle">Attendance Details</h2>
+          <span
+            class="close"
+            onclick="document.getElementById('detailsModal').style.display='none'"
+            >&times;</span
+          >
+        </div>
+        <div class="popup-body" id="detailsBody">Loading...</div>
+      </div>
+    </div>
+
+    <script>
+      function navigateToHome() {
+        window.location.href = "first.html";
+      }
+      function showInfo(type) {
+        const modal = document.getElementById("infoModal");
+        const title = document.getElementById("infoTitle");
+        const body = document.getElementById("infoBody");
+        if (type === "about") {
+          title.textContent = "About This Website";
+          body.innerHTML =
+            "<p>This University Timetable Management System streamlines creating and managing timetables for students and staff.</p>";
+        } else {
+          title.textContent = "Contact Us";
+          body.innerHTML =
+            "<p><strong>Email:</strong> shaikfayaz73822@gmail.com<br><strong>Phone:</strong> 7382259565<br><strong>Address:</strong> Kukatpally, Hyderabad, India</p>";
+        }
+        modal.style.display = "flex";
+      }
+      document.getElementById("closeInfoModal").onclick = () =>
+        (document.getElementById("infoModal").style.display = "none");
+      window.onclick = (e) => {
+        if (e.target.id === "infoModal")
+          document.getElementById("infoModal").style.display = "none";
+      };
+
+      // Fetch and render attendance
+      const params = new URLSearchParams(window.location.search);
+      const roll = params.get("rollnumber");
+      fetch(`get_attendance.php?rollnumber=${encodeURIComponent(roll)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const tbody = document.getElementById("studentBody");
+          const chart = document.getElementById("bar-chart");
+          if (!data.length) {
+            tbody.innerHTML =
+              '<tr><td colspan="5">No attendance data found.</td></tr>';
+            return;
+          }
+          data.sort((a, b) => a.subject.localeCompare(b.subject));
+          data.forEach((rec) => {
+            const pct = parseFloat(rec.percentage);
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${rec.subject}</td>
+                      <td>${rec.classes_attended}</td>
+                      <td>${rec.total_classes}</td>
+                      <td class="percentage">${pct}%</td>
+                      <td>${rec.faculty}</td>
+                      <td><button onclick="viewDetails('${rec.subject}', '${rec.faculty}')">View</button></td>`;
+            tbody.appendChild(tr);
+
+            const col = document.createElement("div");
+            col.className = "bar-column";
+
+            const bar = document.createElement("div");
+            bar.className = "bar";
+            bar.style.height = pct * 2.5 + "px";
+            bar.innerText = pct + "%";
+
+            const label = document.createElement("div");
+            label.innerText = rec.subject;
+            label.style.marginTop = "10px";
+            label.style.fontSize = "13px";
+            label.style.color = "#333";
+
+            col.append(bar, label);
+            chart.append(col);
+          });
+        })
+        .catch((err) => console.error("Error fetching attendance:", err));
+      function viewDetails(subject, faculty) {
+        const modal = document.getElementById("detailsModal");
+        const body = document.getElementById("detailsBody");
+        const roll = new URLSearchParams(window.location.search).get(
+          "rollnumber"
+        );
+        document.getElementById(
+          "detailsTitle"
+        ).textContent = `Attendance Details - ${subject}`;
+
+        body.innerHTML = "Loading...";
+
+        fetch(
+          `get_attendance_details.php?rollnumber=${encodeURIComponent(
+            roll
+          )}&subject=${encodeURIComponent(
+            subject
+          )}&faculty=${encodeURIComponent(faculty)}`
+        )
+          .then((res) => res.json())
+          .then((records) => {
+            if (!records.length) {
+              body.innerHTML =
+                "<p>No attendance records found for this subject.</p>";
+              return;
+            }
+
+            let html =
+              "<table style='width: 100%; border-collapse: collapse;'>";
+            html +=
+              "<tr><th style='border: 1px solid #ddd; padding: 8px;'>Date</th><th style='border: 1px solid #ddd; padding: 8px;'>Status</th></tr>";
+
+            records.forEach((r) => {
+              html += `<tr>
+                  <td style='border: 1px solid #ddd; padding: 8px;'>${r.date}</td>
+                  <td style='border: 1px solid #ddd; padding: 8px;'>${r.attendance_status}</td>
+                 </tr>`;
+            });
+
+            html += "</table>";
+            body.innerHTML = html;
+          })
+          .catch(() => {
+            body.innerHTML =
+              "<p>Error fetching details. Please try again later.</p>";
+          });
+
+        modal.style.display = "flex";
+      }
+
+      // Close modal when clicked outside
+      window.onclick = (e) => {
+        if (e.target.id === "infoModal" || e.target.id === "detailsModal")
+          e.target.style.display = "none";
+      };
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          // Example: clear session storage or cookies if used
+          // sessionStorage.clear();
+          // Redirect to login or homepage
+          window.location.href = "stulogin.html"; // change this to your actual login page
+        }
+      }
+    </script>
+  </body>
+</html>

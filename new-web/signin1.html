@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="styles2.css" />
+    <link rel="icon" type="image/png" href="icon2.png" />
+
+    <style>
+      /* Page background image */
+      body {
+        background: url("back.jpg") no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+      }
+      button img {
+        height: 18px;
+        margin-left: 8px;
+      }
+      /* Header background changed to gray */
+      .header {
+        background-color: gray;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.5em;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+      }
+      /* Modal styling */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 100; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+      }
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto; /* Center the modal */
+        padding: 20px;
+        border: 2px solid #4caf50; /* Accent border color */
+        width: 80%;
+        max-width: 500px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-family: Arial, sans-serif;
+        color: #333;
+      }
+      .modal-content h2 {
+        margin-top: 0;
+        color: #4caf50;
+      }
+      .close-btn {
+        color: #000;
+        background: none;
+        border: none;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* Profile card with slight transparency */
+      .profiles {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+      .profile {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        padding: 16px;
+        width: 260px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        font-family: Arial, sans-serif;
+      }
+      .profile img {
+        max-width: 100%;
+        border-radius: 4px;
+      }
+
+      /* Profile titles in black */
+      .profile .content h2 {
+        color: black;
+        margin: 12px 0;
+      }
+
+      /* Signup links styled as gray buttons with white, centered, bold text */
+      .profile .content a {
+        display: inline-block;
+        padding: 10px 16px;
+        background-color: gray;
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .profile .content a:hover {
+        background-color: #666;
+      }
+      .profile .content a img {
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+    </style>
+
+    <script>
+      // Redirect to home
+      function navigateToHome() {
+        window.location.href = "first.html";
+      }
+
+      // Redirect based on role
+      function navigateToLoginPage(role) {
+        if (role === "hod") {
+          window.location.href = "adsignin.html";
+        } else if (role === "staff") {
+          window.location.href = "facsignin.html";
+        } else if (role === "student") {
+          window.location.href = "stusignin.html";
+        }
+      }
+
+      // Show About or Contact popup
+      function showPopup(type) {
+        const modal = document.getElementById("modal");
+        const modalBody = document.getElementById("modal-body");
+        if (type === "about") {
+          modalBody.innerHTML = `
+            <h2>𝑨𝒃𝒐𝒖𝒕 𝑻𝒉𝒊𝒔 𝑾𝒆𝒃𝒔𝒊𝒕𝒆 𝒂𝒏𝒅 𝑷𝒂𝒈𝒆</h2>
+            <p>
+              𝙏𝙝𝙞𝙨 𝙐𝙣𝙞𝙫𝙚𝙧𝙨𝙞𝙩𝙮 𝙏𝙞𝙢𝙚𝙩𝙖𝙗𝙡𝙚 𝙈𝙖𝙣𝙖𝙜𝙚𝙢𝙚𝙣𝙩 𝙨𝙮𝙨𝙩𝙚𝙢 𝙨𝙩𝙧𝙚𝙖𝙢𝙡𝙞𝙣𝙚𝙨 𝙩𝙞𝙢𝙚𝙩𝙖𝙗𝙡𝙚 𝙘𝙧𝙚𝙖𝙩𝙞𝙤𝙣 𝙖𝙣𝙙 𝙢𝙖𝙣𝙖𝙜𝙚𝙢𝙚𝙣𝙩.
+            </p>
+          `;
+        } else if (type === "contact") {
+          modalBody.innerHTML = `
+               <h2>𝑪𝒐𝒏𝒕𝒂𝒄𝒕 𝑼𝒔</h2>
+           <p>
+              <strong>𝑬𝒎𝒂𝒊𝒍:</strong> 𝒔𝒉𝒂𝒊𝒌𝒇𝒂𝒚𝒂𝒛73822@𝒈𝒎𝒂𝒊𝒍.𝒄𝒐𝒎<br>
+              <strong>𝑷𝒉𝒐𝒏𝒆:</strong> 7382259565<br>
+              <strong>𝑨𝒅𝒅𝒓𝒆𝒔𝒔:</strong> 𝑲𝒖𝒌𝒂𝒕𝒑𝒂𝒍𝒍𝒚, 𝑯𝒚𝒅𝒆𝒓𝒂𝒃𝒂𝒅, 𝑰𝒏𝒅𝒊𝒂<br>
+              <strong>𝑭𝒐𝒍𝒍𝒐𝒘 𝒖𝒔:</strong> 𝑭𝒂𝒄𝒆𝒃𝒐𝒐𝒌 | 𝑻𝒘𝒊𝒕𝒕𝒆𝒓 | 𝑰𝒏𝒔𝒕𝒂𝒈𝒓𝒂𝒎
+            </p>
+          `;
+        }
+        modal.style.display = "block";
+      }
+
+      // Close modal
+      function closeModal() {
+        document.getElementById("modal").style.display = "none";
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
+  </head>
+
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="logo">
+        <img src="icon.png" alt="Logo Icon" />
+        <span>𝑼𝒏𝒊𝒗𝒆𝒓𝒔𝒊𝒕𝒚 𝑴𝒂𝒏𝒂𝒈𝒆𝒎𝒆𝒏𝒕 𝑺𝒚𝒔𝒕𝒆𝒎</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#" onclick="navigateToHome()">𝑯𝒐𝒎𝒆</a>
+        <a href="#" onclick="showPopup('about')">𝑨𝒃𝒐𝒖𝒕</a>
+        <a href="#" onclick="showPopup('contact')">𝑪𝒐𝒏𝒕𝒂𝒄𝒕</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="profiles">
+        <div class="profile">
+          <img src="admin.jpg" alt="HOD / Admin" />
+          <div class="content">
+            <h2>𝑯𝑶𝑫 / 𝑨𝒅𝒎𝒊𝒏</h2>
+            <a href="#" onclick="navigateToLoginPage('hod')">
+              𝑺𝒊𝒈𝒏𝑼𝒑 <img src="signin.png" alt="Signin Icon" />
+            </a>
+          </div>
+        </div>
+        <div class="profile">
+          <img src="fac1.jpg" alt="Faculty" />
+          <div class="content">
+            <h2>𝑭𝒂𝒄𝒖𝒍𝒕𝒚</h2>
+            <a href="#" onclick="navigateToLoginPage('staff')">
+              𝑺𝒊𝒈𝒏𝑼𝒑 <img src="signin.png" alt="Signin Icon" />
+            </a>
+          </div>
+        </div>
+        <div class="profile">
+          <img src="student.jpg" alt="Student" />
+          <div class="content">
+            <h2>𝑺𝒕𝒖𝒅𝒆𝒏𝒕𝒔</h2>
+            <a href="#" onclick="navigateToLoginPage('student')">
+              𝑺𝒊𝒈𝒏𝑼𝒑 <img src="signin.png" alt="Signin Icon" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Popup Structure -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  </body>
+</html>
